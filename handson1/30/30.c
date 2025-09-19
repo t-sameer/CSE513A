@@ -11,6 +11,7 @@ Date: 28th Aug, 2025.
 #include <unistd.h>
 #include <time.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 
 int main() {
     pid_t pid = fork();
@@ -29,8 +30,8 @@ int main() {
         time_t now = time(NULL);
         struct tm *t = localtime(&now);
 
-        if (t->tm_hour == 14 && t->tm_min == 23) {
-            execl("/bin/sh", "sh", "/home/sameer/Study/Systems/handsOn/30/hello.sh", (char *)NULL);
+        if (t->tm_hour == 19 && t->tm_min == 18) {
+            execl("/bin/sh", "sh", "/home/sameer/CSE513A/handson1/30/hello.sh", (char *)NULL);
         }
 
         sleep(1);

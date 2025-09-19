@@ -36,20 +36,38 @@ int main()
     }
 
     else{
-	printf("locking record\n");
+	printf("locking record %d\n", recordID);
+	
 	wrlock.l_start = (recordID-1)*sizeof(struct record);
     	wrlock.l_len = sizeof(struct record);
     	fcntl(fd, F_SETLKW, &wrlock);
+	
+	printf("record %d is locked\n\n", recordID);	
+	
+	struct record rec;
 
-    	printf("record %d is locked\nPress enter to unlock it\n", recordID);
+	lseek(fd, (recordID - 1)* sizeof(struct record), SEEK_SET);
+	read(fd, &rec, sizeof(struct record));
+
+	printf("current record is %d: %d\n", rec.recordID, rec.data);
+	
+	printf("enter new value for record %d\n", recordID);
+	scanf("%d", &rec.data);
+
+	lseek(fd, (recordID - 1)* sizeof(struct record), SEEK_SET);
+	write(fd, &rec, sizeof(struct record));
+
+	printf("Record %d updated to data: %d\n\n", recordID, rec.data);
+	printf("Press enter to unlock\n");
+
     	getchar();
     	getchar();
+	
 
     	wrlock.l_type = F_UNLCK;
     	fcntl(fd, F_SETLKW, &wrlock);
     	printf("record %d is unlocked\n",recordID);
     }
-    
     return 0;
 }
 /*
